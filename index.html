@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error X Web</title>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Orbitron', sans-serif;
+            background: black;
+            overflow: hidden;
+        }
+
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: black;
+        }
+
+        .container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #9900ff;
+            box-shadow: 0 0 20px #9900ff;
+        }
+
+        .title {
+            color: #9900ff;
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .game-period {
+            color: white;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .result-box {
+            background: black;
+            border: 2px solid #9900ff;
+            padding: 15px;
+            font-size: 24px;
+            color: white;
+            font-weight: bold;
+            text-shadow: 0 0 10px #9900ff;
+        }
+
+        .welcome-button {
+            margin-top: 15px;
+            padding: 10px;
+            background: white;
+            color: black;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 5px;
+        }
+
+        .welcome-button:hover {
+            background: #9900ff;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<div id="particles-js"></div>
+
+<div class="container">
+    <div class="title">NIKKU X MODS</div>
+    <div class="game-period">GAME PERIOD:<br><span id="textview1"></span></div>
+    <div class="result-box" id="textview3">Calculating...</div>
+    <button class="welcome-button" onclick="window.location.href='https://t.me/+UXXqSylBcNZhMGM9';">
+        WELCOME NIKKU X MODS
+    </button>
+</div>
+
+<script>
+    // Particles.js setup
+    particlesJS("particles-js", {
+        "particles": {
+            "number": {
+                "value": 80,
+                "density": { "enable": true, "value_area": 800 }
+            },
+            "color": { "value": "#9900ff" },
+            "shape": {
+                "type": "circle",
+                "stroke": { "width": 0, "color": "#000000" }
+            },
+            "opacity": {
+                "value": 0.5,
+                "random": false,
+                "anim": { "enable": false, "speed": 1, "opacity_min": 0.1, "sync": false }
+            },
+            "size": {
+                "value": 3,
+                "random": true,
+                "anim": { "enable": false, "speed": 40, "size_min": 0.1, "sync": false }
+            },
+            "line_linked": {
+                "enable": false
+            },
+            "move": {
+                "enable": true,
+                "speed": 3,
+                "direction": "none",
+                "random": false,
+                "straight": false,
+                "out_mode": "out",
+                "bounce": false
+            }
+        }
+    });
+
+    let lastPeriod = ""; // Stores last period number
+    let lastResult = ""; // Stores last result to prevent unnecessary updates
+
+    function generateRandomNumbers(exclude) {
+        let randomNumbers = [];
+        while (randomNumbers.length < 2) {
+            let randNum = Math.floor(Math.random() * 9) + 1;
+            if (randNum !== exclude && !randomNumbers.includes(randNum)) {
+                randomNumbers.push(randNum);
+            }
+        }
+        return randomNumbers;
+    }
+
+    function updatePeriodAndResult() {
+        let now = new Date();
+        let year = now.getFullYear();
+        let month = String(now.getMonth() + 1).padStart(2, '0');
+        let day = String(now.getDate()).padStart(2, '0');
+        let hour = now.getHours();
+        let minute = now.getMinutes();
+
+        // Define start time at 5:29 AM
+        let startHour = 5;
+        let startMinute = 29;
+        
+        // Calculate elapsed minutes since 5:29 AM
+        let elapsedMinutes = (hour * 60 + minute) - (startHour * 60 + startMinute);
+        if (elapsedMinutes < 0) elapsedMinutes = 0;
+
+        // Generate the period number
+        let periodNumber = `100001${String(elapsedMinutes).padStart(4, '0')}`;
+        let formattedDate = `${year}${month}${day}`;
+        let finalPeriod = formattedDate + periodNumber;
+
+        // Update textview1 only if period has changed
+        if (finalPeriod !== lastPeriod) {
+            lastPeriod = finalPeriod;
+            document.getElementById("textview1").innerText = finalPeriod;
+
+            // Generate a number under 9 from period value
+            let calculationNumber = (elapsedMinutes % 9) + 1;
+
+            // Determine result based on calculationNumber
+            let resultText = (calculationNumber < 5) ? "SMALL" : "BIG";
+
+            // Generate two random numbers between 1 and 9 (excluding calculationNumber)
+            let randomNumbers = generateRandomNumbers(calculationNumber);
+
+            // Set new result
+            lastResult = `${resultText} ${randomNumbers[0]},${randomNumbers[1]}`;
+            document.getElementById("textview3").innerText = lastResult;
+        } else {
+            // Keep the same result if period hasn't changed
+            document.getElementById("textview3").innerText = lastResult;
+        }
+    }
+
+    // Update period and result every second
+    setInterval(updatePeriodAndResult, 1000);
+    
+    // Initial call
+    updatePeriodAndResult();
+</script>
+
+</body>
+</html>
